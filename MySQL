@@ -15,8 +15,8 @@ CREATE TABLE dairy_products (
     `Quantity (liters/kg)` FLOAT,
     `Price per Unit` FLOAT,
     `Total Value` FLOAT,
-    `Shelf Life (days)` INT,             -- ✅ 改为 INT
-    `Storage Condition` VARCHAR(50),     -- ✅ 改为 VARCHAR
+    `Shelf Life (days)` INT,            
+    `Storage Condition` VARCHAR(50),   
     `Production Date` DATE,
     `Expiration Date` DATE,
     `Quantity Sold (liters/kg)` FLOAT,
