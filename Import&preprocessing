@@ -1,0 +1,33 @@
+import pandas as pd
+import mysql.connector
+from sqlalchemy import create_engine
+
+# Load the dataset
+df = pd.read_csv("dairy_dataset.csv")
+
+# Show column names
+print(df.columns)
+
+# Drop rows with missing essential fields
+df = df.dropna(subset=["Product Name", "Price per Unit (sold)"])
+
+# Convert negative values in quantity to absolute values
+df["Quantity Sold (liters/kg)"] = df["Quantity Sold (liters/kg)"].abs()
+
+# Remove duplicate records
+df = df.drop_duplicates()
+
+# Convert date columns to datetime format
+df["Production Date"] = pd.to_datetime(df["Production Date"], errors='coerce')
+df["Expiration Date"] = pd.to_datetime(df["Expiration Date"], errors='coerce')
+
+# Standardize column names for database compatibility
+df.columns = [col.strip().lower().replace(" ", "_").replace("(", "").replace(")", "").replace("/", "_") for col in df.columns]
+
+# Connect to MySQL database (replace with your actual credentials)
+engine = create_engine("mysql+mysqlconnector://root:password@localhost:3306/dairy_sales")
+
+# Write the DataFrame to MySQL (replace the table if it already exists)
+df.to_sql(name="dairy_products", con=engine, index=False, if_exists="replace")
+
+print("✅ Data successfully written to the MySQL database.")
